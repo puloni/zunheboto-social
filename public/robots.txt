@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /install/
+
+Sitemap: https://zunheboto.social/sitemap.xml

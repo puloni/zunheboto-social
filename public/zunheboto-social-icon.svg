@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B192C"/>
+      <stop offset="100%" stop-color="#132438"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="40%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="20" y="20" width="472" height="472" rx="94" fill="none" stroke="#F59E0B" stroke-opacity="0.3" stroke-width="8"/>
+  <!-- Bold Geometric Letter Z with Diamond Accent -->
+  <path d="M112 120 L400 120 L400 172 L212 360 L400 360 L400 412 L112 412 L112 360 L300 172 L112 172 Z" fill="url(#gold)"/>
+  <circle cx="400" cy="120" r="16" fill="#FDE047"/>
+  <circle cx="112" cy="412" r="16" fill="#F59E0B"/>
+</svg>

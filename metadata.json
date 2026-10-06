@@ -1,0 +1,7 @@
+{
+  "name": "Zunheboto Social",
+  "description": "A modern, reliable, and easy-to-manage local publication, community, and directory website for Zunheboto.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

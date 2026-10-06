@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" width="720" height="160">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E0F2FE" />
+      <stop offset="100%" stop-color="#BAE6FD" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <linearGradient id="mountGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95" />
+    </linearGradient>
+    <linearGradient id="redBrush" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EF4444" />
+      <stop offset="50%" stop-color="#DC2626" />
+      <stop offset="100%" stop-color="#B91C1C" />
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Left Emblem Group (center around 90, 80) -->
+  <g transform="translate(15, 8)">
+    <!-- Golden Sunrise & Sun Rays -->
+    <circle cx="85" cy="72" r="38" fill="url(#sunGrad)" opacity="0.95" filter="url(#subtleShadow)" />
+    <path d="M85 24 L85 14 M85 120 L85 130 M37 72 L27 72 M133 72 L143 72 M51 38 L44 31 M119 106 L126 113 M51 106 L44 113 M119 38 L126 31" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+
+    <!-- Mountain Silhouette (Satoi range / Zunheboto ridges) -->
+    <polygon points="35,115 70,62 105,115" fill="#2563EB" opacity="0.75" />
+    <polygon points="65,115 105,48 145,115" fill="url(#mountGrad)" />
+    <polygon points="110,115 135,78 155,115" fill="#1E293B" opacity="0.8" />
+
+    <!-- Traditional Sumi Naga Morung Gable / Crossed Horns (Kika) -->
+    <path d="M 68 85 L 102 118 L 136 85" fill="none" stroke="#78350F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 82 82 L 122 118" fill="none" stroke="#B45309" stroke-width="3" />
+    <path d="M 122 82 L 82 118" fill="none" stroke="#B45309" stroke-width="3" />
+    <!-- Crossed horn roof tops -->
+    <path d="M 72 75 Q 82 84 92 72 Q 102 60 102 75 Q 102 60 112 72 Q 122 84 132 75" fill="none" stroke="#92400E" stroke-width="3.5" stroke-linecap="round" />
+
+    <!-- Traditional Naga Warrior Spears with Red Hair Tufts -->
+    <g transform="translate(10, 0)">
+      <!-- Spear 1 Left -->
+      <line x1="56" y1="26" x2="100" y2="128" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" />
+      <polygon points="53,20 59,28 53,30 49,24" fill="#64748B" />
+      <rect x="58" y="34" width="7" height="12" rx="3" fill="#DC2626" transform="rotate(22 58 34)" />
+      <!-- Spear 2 Right -->
+      <line x1="130" y1="26" x2="86" y2="128" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" />
+      <polygon points="133,20 137,24 133,30 127,28" fill="#64748B" />
+      <rect x="122" y="38" width="7" height="12" rx="3" fill="#DC2626" transform="rotate(-22 122 38)" />
+    </g>
+
+    <!-- Zunheboto District Map Silhouette (Black / Deep Navy) -->
+    <!-- Stylized organic boundary of Zunheboto district -->
+    <path d="M 88 32 C 96 30 108 36 114 44 C 120 52 116 62 122 72 C 126 80 128 92 124 102 C 118 114 106 122 96 126 C 84 130 76 122 72 112 C 68 102 72 94 68 84 C 64 74 68 64 72 54 C 76 44 80 34 88 32 Z" 
+          fill="#0B192C" filter="url(#subtleShadow)" />
+
+    <!-- Bold, Dynamic Red Calligraphy Brush-stroke "Z" overlaying the map -->
+    <path d="M 72 52 
+             C 76 49, 106 48, 118 52 
+             C 120 53, 114 60, 108 66 
+             L 86 98 
+             C 84 101, 88 102, 94 102 
+             L 122 102 
+             C 124 102, 126 106, 124 109 
+             C 121 112, 76 112, 74 108 
+             C 72 104, 78 98, 84 90 
+             L 106 62 
+             C 102 62, 80 63, 72 61 
+             Z"
+          fill="url(#redBrush)" filter="url(#subtleShadow)" />
+    <!-- Artistic brush flare on the Z -->
+    <path d="M 114 50 Q 124 51 126 55 Q 118 64 112 70" fill="url(#redBrush)" opacity="0.9" />
+    <path d="M 70 107 Q 72 102 78 98 Q 72 106 70 107" fill="url(#redBrush)" opacity="0.8" />
+  </g>
+
+  <!-- Right Typography Group -->
+  <g transform="translate(185, 20)">
+    <!-- Main Headline: Zunheboto .social -->
+    <g transform="translate(0, 72)">
+      <!-- Prominent Red Z -->
+      <text x="0" y="0" font-family="'Cinzel', 'Lora', Georgia, serif" font-weight="900" font-size="70" fill="url(#redBrush)" letter-spacing="1">Z</text>
+      <!-- unheboto in bold solid dark navy -->
+      <text x="56" y="-2" font-family="'Plus Jakarta Sans', 'Segoe UI', -apple-system, sans-serif" font-weight="900" font-size="58" fill="#0B192C" letter-spacing="-0.5">unheboto</text>
+      <!-- .social in bold bright crimson red -->
+      <text x="352" y="-2" font-family="'Plus Jakarta Sans', 'Segoe UI', -apple-system, sans-serif" font-weight="900" font-size="58" fill="#DC2626" letter-spacing="-0.5">.social</text>
+    </g>
+
+    <!-- Subtitle Banner with accent divider rules -->
+    <g transform="translate(2, 105)">
+      <!-- Left decorative horizontal rule -->
+      <line x1="0" y1="-5" x2="42" y2="-5" stroke="#D97706" stroke-width="2" stroke-linecap="round" />
+      
+      <!-- Tagline Text -->
+      <text x="52" y="0" font-family="'Plus Jakarta Sans', 'Segoe UI', sans-serif" font-size="12.5" font-weight="800" fill="#0F172A" letter-spacing="3.5" text-transform="uppercase">
+        OUR PEOPLE <tspan fill="#DC2626" font-size="16" dy="-0.5"> • </tspan><tspan dy="0.5">OUR STORIES</tspan> <tspan fill="#DC2626" font-size="16" dy="-0.5"> • </tspan><tspan dy="0.5">OUR ZUNHEBOTO</tspan>
+      </text>
+
+      <!-- Right decorative horizontal rule -->
+      <line x1="472" y1="-5" x2="514" y2="-5" stroke="#D97706" stroke-width="2" stroke-linecap="round" />
+    </g>
+  </g>
+</svg>
