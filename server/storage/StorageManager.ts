@@ -74,13 +74,31 @@ export class StorageManager {
   }
 
   async loadStore(): Promise<any> {
-    try {
-      if (this.config.mode === 'database' && this.isDbConnected) {
+    if (this.config.mode === 'database') {
+      if (!this.isDbConnected) {
+        // Attempt a live reconnection check
+        try {
+          const testRes = await this.activeProvider.testConnection();
+          if (testRes.success) {
+            this.isDbConnected = true;
+            await this.activeProvider.init();
+          }
+        } catch (e) {}
+      }
+
+      if (this.isDbConnected) {
         this.inMemoryCache = await this.activeProvider.loadStore();
         return this.inMemoryCache;
       }
-    } catch (e: any) {
-      console.warn('[StorageManager] Database load error, falling back to JSON store:', e.message);
+
+      // If database is configured but unreachable, serve from existing in-memory cache if available,
+      // but NEVER fall back to empty/default store to avoid corrupting or overwriting production data!
+      if (this.inMemoryCache && Object.keys(this.inMemoryCache).length > 0) {
+        console.warn('[StorageManager] Database unreachable; serving from in-memory cache without overwriting.');
+        return this.inMemoryCache;
+      }
+
+      throw new Error(`MariaDB is configured but currently unreachable (${this.lastStatusMessage}). Refusing to fall back to empty default data.`);
     }
 
     this.inMemoryCache = await this.jsonFallbackProvider.loadStore();
@@ -88,60 +106,77 @@ export class StorageManager {
   }
 
   async saveKey(key: string, data: any): Promise<boolean> {
-    let saved = false;
-
-    if (this.config.mode === 'database' && this.isDbConnected) {
+    if (this.config.mode === 'database') {
+      if (!this.isDbConnected) {
+        console.error(`[StorageManager] Cannot saveKey('${key}'): MariaDB is disconnected. Refusing write to prevent data corruption.`);
+        return false;
+      }
+      let saved = false;
       try {
         saved = await this.activeProvider.saveKey(key, data);
       } catch (e: any) {
         console.error('[StorageManager] Database saveKey error:', e.message);
       }
+      if (saved && this.inMemoryCache) {
+        this.inMemoryCache[key] = data;
+      }
+      return saved;
     }
 
-    // Always mirror/keep JSON in sync or save to JSON if in JSON mode
+    // In JSON mode
     const jsonSaved = await this.jsonFallbackProvider.saveKey(key, data);
-
     if (this.inMemoryCache) {
       this.inMemoryCache[key] = data;
     }
-    return (this.config.mode === 'database' && this.isDbConnected) ? saved : jsonSaved;
+    return jsonSaved;
   }
 
   async deleteArticle(id: string): Promise<boolean> {
-    let dbSuccess = false;
-    if (this.config.mode === 'database' && this.isDbConnected) {
+    if (this.config.mode === 'database') {
+      if (!this.isDbConnected) {
+        console.error('[StorageManager] Cannot deleteArticle: MariaDB is disconnected.');
+        return false;
+      }
+      let dbSuccess = false;
       try {
         dbSuccess = await (this.activeProvider as MysqlStorageProvider).deleteArticle(id);
       } catch (e: any) {
         console.error('[StorageManager] Database deleteArticle error:', e.message);
       }
+      if (this.inMemoryCache && Array.isArray(this.inMemoryCache.articles)) {
+        this.inMemoryCache.articles = this.inMemoryCache.articles.filter((a: any) => a.id !== id);
+      }
+      return dbSuccess;
     }
 
     const jsonSuccess = await this.jsonFallbackProvider.deleteArticle(id);
-
     if (this.inMemoryCache && Array.isArray(this.inMemoryCache.articles)) {
       this.inMemoryCache.articles = this.inMemoryCache.articles.filter((a: any) => a.id !== id);
     }
-
-    return (this.config.mode === 'database' && this.isDbConnected) ? dbSuccess : jsonSuccess;
+    return jsonSuccess;
   }
 
   async saveStore(store: any): Promise<boolean> {
-    let saved = false;
-
-    if (this.config.mode === 'database' && this.isDbConnected) {
+    if (this.config.mode === 'database') {
+      if (!this.isDbConnected) {
+        console.error('[StorageManager] Cannot saveStore: MariaDB is disconnected. Aborting write.');
+        return false;
+      }
+      let saved = false;
       try {
         saved = await this.activeProvider.saveStore(store);
       } catch (e: any) {
         console.error('[StorageManager] Database saveStore error:', e.message);
       }
+      if (saved) {
+        this.inMemoryCache = store;
+      }
+      return saved;
     }
 
-    // Also persist JSON backup
     const jsonSaved = await this.jsonFallbackProvider.saveStore(store);
     this.inMemoryCache = store;
-
-    return (this.config.mode === 'database' && this.isDbConnected) ? saved : jsonSaved;
+    return jsonSaved;
   }
 
   /**

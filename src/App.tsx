@@ -25,7 +25,8 @@ const AppContent: React.FC = () => {
     articles,
     pages,
     articleCategories,
-    listings
+    listings,
+    installConfig
   } = useCms();
 
   // Extract clean pathname without query strings or hash for robust route matching
@@ -161,7 +162,7 @@ const AppContent: React.FC = () => {
     return <AdminHub />;
   }
 
-  if (cleanPath === '/install') {
+  if (cleanPath === '/install' || (!installConfig.is_installed && !cleanPath.startsWith('/admin'))) {
     return <InstallerPage />;
   }
 
@@ -198,6 +199,11 @@ const AppContent: React.FC = () => {
     pageComponent = <ArticleArchivePage />;
   } else if (cleanPath.startsWith('/articles/category/')) {
     const categorySlug = cleanPath.replace('/articles/category/', '').replace(/\/+$/, '');
+    if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
+      try {
+        window.history.replaceState(null, '', `/category/${categorySlug}`);
+      } catch (e) {}
+    }
     pageComponent = <ArticleArchivePage initialCategory={categorySlug} />;
   } else if (cleanPath.startsWith('/category/')) {
     const categorySlug = cleanPath.replace('/category/', '').replace(/\/+$/, '');
@@ -207,6 +213,11 @@ const AppContent: React.FC = () => {
     pageComponent = <AuthorProfilePage slug={authorSlug} />;
   } else if (cleanPath.startsWith('/article/')) {
     const slug = cleanPath.replace('/article/', '').replace(/\/+$/, '');
+    if (typeof window !== 'undefined' && window.history && window.history.replaceState) {
+      try {
+        window.history.replaceState(null, '', `/${slug}`);
+      } catch (e) {}
+    }
     pageComponent = <ArticleDetailPage slug={slug} />;
   } else if (cleanPath === '/directory') {
     pageComponent = <DirectoryArchivePage />;

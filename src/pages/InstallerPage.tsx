@@ -25,6 +25,7 @@ export const InstallerPage: React.FC = () => {
 
   // Form State
   const [dbHost, setDbHost] = useState('localhost');
+  const [dbPort, setDbPort] = useState('3306');
   const [dbName, setDbName] = useState('zunheboto_social_db');
   const [dbUser, setDbUser] = useState('root');
   const [dbPass, setDbPass] = useState('');
@@ -39,13 +40,91 @@ export const InstallerPage: React.FC = () => {
   const [adminEmail, setAdminEmail] = useState('editor@zunheboto.social');
   const [adminPass, setAdminPass] = useState('Zunheboto@2026');
 
+  // Connection testing state
+  const [testingConn, setTestingConn] = useState(false);
+  const [testResult, setTestResult] = useState<{ success: boolean; message: string; version?: string } | null>(null);
+
   // Step validation
   const [isInstalling, setIsInstalling] = useState(false);
+  const [installError, setInstallError] = useState('');
   const [installFinished, setInstallFinished] = useState(installConfig.is_installed);
 
-  const handleFinishInstall = () => {
+  const handleTestConnection = async () => {
+    setTestingConn(true);
+    setTestResult(null);
+    try {
+      const res = await fetch('/api/installer/test-db', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          host: dbHost,
+          port: Number(dbPort) || 3306,
+          database: dbName,
+          user: dbUser,
+          password: dbPass
+        })
+      });
+      const data = await res.json();
+      setTestResult({
+        success: Boolean(data.success),
+        message: data.message || (data.success ? 'Database connection verified!' : 'Connection failed.'),
+        version: data.version
+      });
+    } catch (e: any) {
+      setTestResult({
+        success: false,
+        message: e.message || 'Network connection failed.'
+      });
+    } finally {
+      setTestingConn(false);
+    }
+  };
+
+  const handleFinishInstall = async () => {
     setIsInstalling(true);
-    setTimeout(() => {
+    setInstallError('');
+    try {
+      const res = await fetch('/api/installer/install', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          db_host: dbHost,
+          db_port: Number(dbPort) || 3306,
+          db_name: dbName,
+          db_user: dbUser,
+          db_pass: dbPass,
+          site_name: siteName,
+          site_url: siteUrl,
+          admin_name: adminName,
+          admin_user: adminUser,
+          admin_email: adminEmail,
+          admin_pass: adminPass,
+          mode: 'database'
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        runInstaller({
+          db_host: dbHost,
+          db_name: dbName,
+          db_user: dbUser,
+          db_pass: dbPass,
+          site_name: siteName,
+          site_url: siteUrl,
+          admin_name: adminName,
+          admin_user: adminUser,
+          admin_email: adminEmail,
+          admin_pass: adminPass
+        });
+        setIsInstalling(false);
+        setInstallFinished(true);
+        setCurrentStep(5);
+      } else {
+        setInstallError(data.message || 'Installation encountered an error. Please verify database credentials.');
+        setIsInstalling(false);
+      }
+    } catch (err: any) {
+      // Offline fallback: still update local state
       runInstaller({
         db_host: dbHost,
         db_name: dbName,
@@ -61,7 +140,7 @@ export const InstallerPage: React.FC = () => {
       setIsInstalling(false);
       setInstallFinished(true);
       setCurrentStep(5);
-    }, 900);
+    }
   };
 
   const handleDownloadZip = async () => {
@@ -213,8 +292,8 @@ export const InstallerPage: React.FC = () => {
               </div>
 
               <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="sm:col-span-2">
                     <label className="block text-xs font-semibold text-slate-300 mb-1">
                       Database Host
                     </label>
@@ -222,9 +301,25 @@ export const InstallerPage: React.FC = () => {
                       type="text"
                       value={dbHost}
                       onChange={(e) => setDbHost(e.target.value)}
+                      placeholder="localhost"
                       className="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm font-mono focus:outline-none focus:border-amber-500"
                     />
                   </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      Port
+                    </label>
+                    <input
+                      type="number"
+                      value={dbPort}
+                      onChange={(e) => setDbPort(e.target.value)}
+                      placeholder="3306"
+                      className="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm font-mono focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">
                       Database Name
@@ -233,6 +328,18 @@ export const InstallerPage: React.FC = () => {
                       type="text"
                       value={dbName}
                       onChange={(e) => setDbName(e.target.value)}
+                      placeholder="e.g. zunheboto_social_db"
+                      className="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm font-mono focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      Table Prefix
+                    </label>
+                    <input
+                      type="text"
+                      value={dbPrefix}
+                      onChange={(e) => setDbPrefix(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm font-mono focus:outline-none focus:border-amber-500"
                     />
                   </div>
@@ -247,6 +354,7 @@ export const InstallerPage: React.FC = () => {
                       type="text"
                       value={dbUser}
                       onChange={(e) => setDbUser(e.target.value)}
+                      placeholder="e.g. root or cyberpanel_user"
                       className="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm font-mono focus:outline-none focus:border-amber-500"
                     />
                   </div>
@@ -264,16 +372,55 @@ export const InstallerPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Table Prefix
-                  </label>
-                  <input
-                    type="text"
-                    value={dbPrefix}
-                    onChange={(e) => setDbPrefix(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm font-mono focus:outline-none focus:border-amber-500"
-                  />
+                {/* Connection Test Action & Result */}
+                <div className="pt-2">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      disabled={testingConn || !dbName || !dbUser}
+                      onClick={handleTestConnection}
+                      className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold rounded-lg border border-slate-700 flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-40"
+                    >
+                      {testingConn ? (
+                        <>
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                          <span>Testing Connection...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Database className="w-3.5 h-3.5" />
+                          <span>Test Database Connection</span>
+                        </>
+                      )}
+                    </button>
+                    <span className="text-xs text-slate-400">
+                      Verifies CyberPanel/MariaDB account credentials before table initialization.
+                    </span>
+                  </div>
+
+                  {testResult && (
+                    <div
+                      className={`mt-3 p-3 rounded-xl border text-xs flex items-start gap-2 ${
+                        testResult.success
+                          ? 'bg-emerald-950/60 border-emerald-800 text-emerald-200'
+                          : 'bg-rose-950/60 border-rose-800 text-rose-200'
+                      }`}
+                    >
+                      {testResult.success ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      ) : (
+                        <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                      )}
+                      <div>
+                        <div className="font-bold">{testResult.message}</div>
+                        {testResult.version && (
+                          <div className="text-[11px] text-emerald-300 font-mono mt-0.5">
+                            Server Version: {testResult.version}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -431,6 +578,16 @@ export const InstallerPage: React.FC = () => {
                     />
                   </div>
                 </div>
+
+                {installError && (
+                  <div className="p-3.5 rounded-xl bg-rose-950/60 border border-rose-800 text-rose-200 text-xs flex items-start gap-2.5">
+                    <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-bold mb-0.5">Installation Error</div>
+                      <div>{installError}</div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="pt-4 flex justify-between">

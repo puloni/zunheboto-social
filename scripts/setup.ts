@@ -2,6 +2,7 @@ import readline from 'readline';
 import { getStorageConfig, saveStorageConfig } from '../server/storage/config';
 import { MysqlStorageProvider } from '../server/storage/MysqlProvider';
 import { JsonStorageProvider } from '../server/storage/JsonProvider';
+import { markCmsInstalled } from '../server/storage/installation';
 
 function createPrompter() {
   const rl = readline.createInterface({
@@ -117,6 +118,12 @@ async function main() {
           password
         });
 
+        await markCmsInstalled({
+          mode: 'database',
+          dbName: database,
+          adminUsername: user
+        });
+
         console.log('\n===========================================================');
         console.log('   Configuration successfully saved to .env and system!   ');
         console.log('===========================================================');
@@ -151,6 +158,9 @@ async function main() {
     } else {
       // JSON Storage Option
       saveStorageConfig({
+        mode: 'json'
+      });
+      await markCmsInstalled({
         mode: 'json'
       });
       console.log('\n===========================================================');

@@ -4,6 +4,7 @@ import fs from 'fs';
 import sharp from 'sharp';
 import { createServer as createViteServer } from 'vite';
 import { storageManager } from './server/storage';
+import { isCmsInstalled, getInstallationStatus, markCmsInstalled } from './server/storage/installation';
 import { getRealWeatherData, searchLocations, WeatherProviderType } from './server/weatherService';
 import {
   INITIAL_SETTINGS,
@@ -36,7 +37,9 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Persistent Storage Directories
 const DATA_DIR = path.join(process.cwd(), 'data');
-const UPLOADS_DIR = path.join(process.cwd(), 'public', 'uploads');
+const UPLOADS_DIR = process.env.UPLOADS_DIR
+  ? path.resolve(process.env.UPLOADS_DIR)
+  : path.join(process.cwd(), 'public', 'uploads');
 
 // Ensure directories exist
 if (!fs.existsSync(DATA_DIR)) {
@@ -304,6 +307,150 @@ app.post('/api/admin/storage/migrate-json-to-db', async (req, res) => {
   }
 });
 
+// Browser Installer API Endpoints
+app.get('/api/installer/status', async (req, res) => {
+  try {
+    const status = await getInstallationStatus();
+    res.json({ success: true, ...status });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.post('/api/installer/test-db', async (req, res) => {
+  try {
+    const installed = await isCmsInstalled();
+    if (installed) {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.includes('Bearer')) {
+        return res.status(403).json({ success: false, message: 'CMS is already installed.' });
+      }
+    }
+
+    const { host, port, database, user, password } = req.body || {};
+    const customConfig = {
+      host: (host || 'localhost').trim(),
+      port: Number(port) || 3306,
+      database: (database || '').trim(),
+      user: (user || '').trim(),
+      password: password || '',
+    };
+    const result = await storageManager.testConnection(customConfig);
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.post('/api/installer/install', async (req, res) => {
+  try {
+    const installed = await isCmsInstalled();
+    if (installed) {
+      return res.status(403).json({ success: false, message: 'CMS is already installed. Reinstallation is disallowed for security.' });
+    }
+
+    const {
+      db_host = 'localhost',
+      db_port = 3306,
+      db_name = '',
+      db_user = '',
+      db_pass = '',
+      site_name = 'Zunheboto Social',
+      site_url = 'https://zunheboto.social',
+      admin_name = 'Super Administrator',
+      admin_user = 'administrator',
+      admin_email = 'editor@zunheboto.social',
+      admin_pass = 'Cristiano7@',
+      mode = 'database'
+    } = req.body || {};
+
+    if (mode === 'database') {
+      if (!db_name.trim() || !db_user.trim()) {
+        return res.status(400).json({ success: false, message: 'Database name and database username are required.' });
+      }
+
+      const dbConfig = {
+        host: db_host.trim(),
+        port: Number(db_port) || 3306,
+        database: db_name.trim(),
+        user: db_user.trim(),
+        password: db_pass
+      };
+
+      // 1. Test database connection
+      const testRes = await storageManager.testConnection(dbConfig);
+      if (!testRes.success) {
+        return res.status(400).json({ success: false, message: `Database connection test failed: ${testRes.message}` });
+      }
+
+      // 2. Initialize and verify tables and migrations
+      const initRes = await storageManager.initTables(dbConfig);
+      if (!initRes.success) {
+        return res.status(500).json({ success: false, message: `Database table creation failed: ${initRes.message}` });
+      }
+
+      // 3. Save environment configuration
+      await storageManager.updateConfiguration({
+        mode: 'database',
+        ...dbConfig
+      });
+    } else {
+      await storageManager.updateConfiguration({
+        mode: 'json'
+      });
+    }
+
+    // 4. Create first administrator and configure initial settings
+    const currentStore = await storageManager.loadStore();
+
+    currentStore.settings = {
+      ...currentStore.settings,
+      site_name: site_name.trim() || 'Zunheboto Social',
+      site_title: `${site_name.trim() || 'Zunheboto Social'} — Local News, Community Voice & District Directory`,
+      site_url: site_url.trim() || 'https://zunheboto.social',
+      contact_email: admin_email.trim() || 'editor@zunheboto.social'
+    };
+    await storageManager.saveKey('settings', currentStore.settings);
+
+    const firstAdmin = {
+      id: 'admin_1',
+      name: admin_name.trim() || 'Super Administrator',
+      username: admin_user.trim() || 'administrator',
+      email: admin_email.trim() || 'editor@zunheboto.social',
+      role: 'superadmin',
+      bio: 'Super Administrator',
+      avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+      created_at: new Date().toISOString(),
+      last_login: new Date().toISOString()
+    };
+    const existingUsers = currentStore.users || [];
+    const updatedUsers = [firstAdmin, ...existingUsers.filter((u: any) => u.username !== firstAdmin.username && u.id !== 'admin_1')];
+    await storageManager.saveKey('users', updatedUsers);
+    await storageManager.saveKey('adminUser', firstAdmin);
+
+    currentStore.adminUser = firstAdmin;
+    currentStore.users = updatedUsers;
+
+    // 5. Permanently record installation state
+    await markCmsInstalled({
+      mode,
+      adminUsername: firstAdmin.username,
+      dbName: mode === 'database' ? db_name.trim() : undefined
+    });
+
+    // 6. Reload store
+    store = await storageManager.loadStore();
+
+    return res.json({
+      success: true,
+      message: 'Zunheboto Social CMS successfully installed and ready for production!'
+    });
+  } catch (err: any) {
+    console.error('[Installer] Installation error:', err);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // Media Upload Endpoint
 app.post('/api/media/upload', async (req, res) => {
   try {
@@ -529,7 +676,15 @@ function injectMetaTags(html: string, reqPath: string, currentStore: any): strin
       description = article.meta_description || article.excerpt || description;
       image = toAbsolute(article.social_image || article.featured_image || image);
       ogType = 'article';
-      canonical = `${siteUrl}/article/${article.slug}`;
+      canonical = `${siteUrl}/${article.slug}`;
+    }
+  } else if (reqPath.startsWith('/articles/category/')) {
+    const slug = reqPath.replace('/articles/category/', '').split('?')[0];
+    const cat = (currentStore?.articleCategories || []).find((c: any) => c.slug === slug);
+    if (cat) {
+      title = `${cat.name} Chronicles | ${siteName}`;
+      description = cat.description || `Read the latest ${cat.name} news and updates from Zunheboto district.`;
+      canonical = `${siteUrl}/category/${cat.slug}`;
     }
   } else if (reqPath.startsWith('/listing/')) {
     const slug = reqPath.replace('/listing/', '').split('?')[0];
@@ -575,6 +730,27 @@ function injectMetaTags(html: string, reqPath: string, currentStore: any): strin
     title = `District Photo Gallery | ${siteName}`;
     description = 'A curated photographic archive celebrating the landscapes, tribal culture, and heritage of Zunheboto.';
     canonical = `${siteUrl}/gallery`;
+  } else {
+    // Dynamic WordPress Root Slug Permalink
+    const rawRootSlug = reqPath.replace(/^\/+/, '').split('?')[0].replace(/\/+$/, '');
+    const matchedArt = (currentStore?.articles || []).find((a: any) => a.slug === rawRootSlug);
+    const matchedPg = (currentStore?.pages || []).find((p: any) => p.slug === rawRootSlug);
+    const matchedCt = (currentStore?.articleCategories || []).find((c: any) => c.slug === rawRootSlug);
+    if (matchedArt) {
+      title = `${matchedArt.seo_title || matchedArt.title} | ${siteName}`;
+      description = matchedArt.meta_description || matchedArt.excerpt || description;
+      image = toAbsolute(matchedArt.social_image || matchedArt.featured_image || image);
+      ogType = 'article';
+      canonical = `${siteUrl}/${matchedArt.slug}`;
+    } else if (matchedPg) {
+      title = `${matchedPg.title} | ${siteName}`;
+      description = matchedPg.meta_description || description;
+      canonical = `${siteUrl}/${matchedPg.slug}`;
+    } else if (matchedCt) {
+      title = `${matchedCt.name} Chronicles | ${siteName}`;
+      description = matchedCt.description || `Read the latest ${matchedCt.name} news and updates from Zunheboto district.`;
+      canonical = `${siteUrl}/category/${matchedCt.slug}`;
+    }
   }
 
   // Replace <title>

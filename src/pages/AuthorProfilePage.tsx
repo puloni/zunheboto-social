@@ -211,7 +211,7 @@ export const AuthorProfilePage: React.FC<AuthorProfilePageProps> = ({ slug }) =>
             {authorArticles.map((art) => (
               <a
                 key={art.id}
-                href={`/article/${art.slug}`}
+                href={`/${art.slug}`}
                 className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition-all group cursor-pointer flex flex-col block"
               >
                 <div className="relative aspect-video overflow-hidden bg-slate-100">

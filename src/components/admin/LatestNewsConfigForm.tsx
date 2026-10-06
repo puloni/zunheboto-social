@@ -147,9 +147,9 @@ export const LatestNewsConfigForm: React.FC<Props> = ({
               />
               <input
                 type="text"
-                value={section.cta_url || '/articles/category/local-news'}
+                value={section.cta_url || '/category/local-news'}
                 onChange={(e) => onUpdate({ cta_url: e.target.value })}
-                placeholder="/articles/category/local-news"
+                placeholder="/category/local-news"
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-xs font-mono focus:outline-none focus:border-blue-600"
               />
             </div>

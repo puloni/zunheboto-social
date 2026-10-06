@@ -41,13 +41,13 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ slug }) =>
     if (!article) return;
 
     const siteUrl = (settings.site_url || 'https://zunheboto.social').replace(/\/+$/, '');
-    const canonicalUrl = `${siteUrl}/article/${article.slug}`;
+    const canonicalUrl = `${siteUrl}/${article.slug}`;
 
     const breadcrumbLd = buildBreadcrumbSchema(
       [
         { name: 'Home', url: '/' },
-        { name: article.category_name || 'News', url: `/articles/category/${article.category_slug || 'news'}` },
-        { name: article.title, url: `/article/${article.slug}` }
+        { name: article.category_name || 'News', url: `/category/${article.category_slug || 'news'}` },
+        { name: article.title, url: `/${article.slug}` }
       ],
       settings
     );
@@ -99,7 +99,7 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ slug }) =>
     .slice(0, 3);
 
   const siteUrl = (settings.site_url || 'https://zunheboto.social').replace(/\/+$/, '');
-  const currentUrl = `${siteUrl}/article/${article.slug}`;
+  const currentUrl = `${siteUrl}/${article.slug}`;
   const authorSlug = slugify(article.author_name);
 
   return (
@@ -131,7 +131,7 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ slug }) =>
 
         <div className="flex items-center gap-2">
           <a
-            href={`/articles/category/${article.category_slug || 'news'}`}
+            href={`/category/${article.category_slug || 'news'}`}
             className="text-[11px] font-bold uppercase tracking-[0.18em] text-amber-700 hover:text-amber-800 cursor-pointer transition-colors"
           >
             {article.category_name}
@@ -293,7 +293,7 @@ export const ArticleDetailPage: React.FC<ArticleDetailPageProps> = ({ slug }) =>
             {relatedArticles.map((rel) => (
               <a
                 key={rel.id}
-                href={`/article/${rel.slug}`}
+                href={`/${rel.slug}`}
                 className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition-shadow group cursor-pointer flex flex-col block"
               >
                 <div className="aspect-video relative overflow-hidden bg-slate-100">

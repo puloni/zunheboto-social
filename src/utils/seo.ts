@@ -283,7 +283,7 @@ export function buildWebsiteSchema(settings: SiteSettings) {
  */
 export function buildArticleSchema(article: Article, settings: SiteSettings) {
   const siteUrl = (settings.site_url || 'https://zunheboto.social').replace(/\/+$/, '');
-  const articleUrl = article.canonical_url || `${siteUrl}/article/${article.slug}`;
+  const articleUrl = article.canonical_url || `${siteUrl}/${article.slug}`;
 
   return {
     '@context': 'https://schema.org',

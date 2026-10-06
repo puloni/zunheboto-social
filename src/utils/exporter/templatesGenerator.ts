@@ -386,7 +386,7 @@ if (empty($sections)) {
                         </div>
                         <div class="zs-hero-body">
                             <h1 class="zs-hero-title">
-                                <a href="/article/<?= sanitize($heroStory['slug']) ?>"><?= sanitize($heroStory['title']) ?></a>
+                                <a href="/<?= sanitize($heroStory['slug']) ?>"><?= sanitize($heroStory['title']) ?></a>
                             </h1>
                             <p class="zs-hero-excerpt"><?= sanitize($heroStory['excerpt']) ?></p>
                             <div class="zs-meta-row">
@@ -404,7 +404,7 @@ if (empty($sections)) {
                                 <img src="<?= sanitize($ss['featured_image']) ?>" alt="<?= sanitize($ss['title']) ?>" class="zs-side-thumb">
                                 <div class="zs-side-body">
                                     <span class="zs-side-cat" style="color:<?= sanitize($ss['cat_color'] ?? '#d97706') ?>"><?= sanitize($ss['cat_name'] ?? 'District') ?></span>
-                                    <h3 class="zs-side-title"><a href="/article/<?= sanitize($ss['slug']) ?>"><?= sanitize($ss['title']) ?></a></h3>
+                                    <h3 class="zs-side-title"><a href="/<?= sanitize($ss['slug']) ?>"><?= sanitize($ss['title']) ?></a></h3>
                                     <span class="zs-side-date"><?= date('M j, Y', strtotime($ss['published_at'])) ?></span>
                                 </div>
                             </div>
@@ -422,7 +422,7 @@ if (empty($sections)) {
                 <span class="zs-ticker-label">⚡ LATEST UPDATES:</span>
                 <div class="zs-ticker-content">
                     <?php foreach ($tickerArticles as $ta): ?>
-                        <a href="/article/<?= sanitize($ta['slug']) ?>" class="zs-ticker-item">&bull; <?= sanitize($ta['title']) ?></a>
+                        <a href="/<?= sanitize($ta['slug']) ?>" class="zs-ticker-item">&bull; <?= sanitize($ta['title']) ?></a>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -455,7 +455,7 @@ if (empty($sections)) {
                                 <span class="zs-art-cat" style="background:<?= sanitize($art['cat_color'] ?? '#0284c7') ?>"><?= sanitize($art['cat_name'] ?? 'News') ?></span>
                             </div>
                             <div class="zs-art-content">
-                                <h3 class="zs-art-title"><a href="/article/<?= sanitize($art['slug']) ?>"><?= sanitize($art['title']) ?></a></h3>
+                                <h3 class="zs-art-title"><a href="/<?= sanitize($art['slug']) ?>"><?= sanitize($art['title']) ?></a></h3>
                                 <p class="zs-art-desc"><?= sanitize($art['excerpt']) ?></p>
                                 <div class="zs-art-meta">
                                     <span><?= date('M j, Y', strtotime($art['published_at'])) ?></span> &bull; 
@@ -476,7 +476,7 @@ if (empty($sections)) {
                 </div>
                 <div class="zs-cat-pills">
                     <?php foreach ($cats as $cat): ?>
-                        <a href="/articles?category=<?= urlencode($cat['slug']) ?>" class="zs-cat-pill-btn">
+                        <a href="/category/<?= urlencode($cat['slug']) ?>" class="zs-cat-pill-btn">
                             <span class="zs-cat-dot" style="background:<?= sanitize($cat['color']) ?>"></span>
                             <?= sanitize($cat['name']) ?>
                         </a>
@@ -679,7 +679,7 @@ if ($stmt) {
     <div class="zs-cat-filter-bar">
         <a href="/articles" class="zs-filter-pill <?= empty($selectedCat) ? 'active' : '' ?>">All News</a>
         <?php foreach ($categories as $c): ?>
-            <a href="/articles?category=<?= urlencode($c['slug']) ?>" class="zs-filter-pill <?= $selectedCat === $c['slug'] ? 'active' : '' ?>">
+            <a href="/category/<?= urlencode($c['slug']) ?>" class="zs-filter-pill <?= $selectedCat === $c['slug'] ? 'active' : '' ?>">
                 <span class="zs-dot-sm" style="background:<?= sanitize($c['color']) ?>"></span>
                 <?= sanitize($c['name']) ?>
             </a>
@@ -696,7 +696,7 @@ if ($stmt) {
                         <span class="zs-art-cat" style="background:<?= sanitize($art['cat_color'] ?? '#0284c7') ?>"><?= sanitize($art['cat_name'] ?? 'News') ?></span>
                     </div>
                     <div class="zs-art-content">
-                        <h3 class="zs-art-title"><a href="/article/<?= sanitize($art['slug']) ?>"><?= sanitize($art['title']) ?></a></h3>
+                        <h3 class="zs-art-title"><a href="/<?= sanitize($art['slug']) ?>"><?= sanitize($art['title']) ?></a></h3>
                         <p class="zs-art-desc"><?= sanitize($art['excerpt']) ?></p>
                         <div class="zs-art-meta">
                             <span>🕒 <?= date('M j, Y', strtotime($art['published_at'])) ?></span> &bull; 
@@ -747,7 +747,7 @@ $metaDesc = $article['meta_description'] ?: $article['excerpt'];
 $pageOgImage = $article['featured_image'] ?: '';
 $ogType = 'article';
 $siteBase = rtrim(get_setting('site_url', 'https://zunheboto.social'), '/');
-$pageCanonical = $siteBase . '/article/' . $article['slug'];
+$pageCanonical = $siteBase . '/' . $article['slug'];
 $currentUrl = $pageCanonical;
 
 // Related articles from same category
@@ -843,7 +843,7 @@ require_once __DIR__ . '/header.php';
                     <article class="zs-art-card">
                         <img src="<?= sanitize($ra['featured_image']) ?>" alt="<?= sanitize($ra['title']) ?>" class="zs-art-thumb">
                         <div class="zs-art-content">
-                            <h4 class="zs-art-title"><a href="/article/<?= sanitize($ra['slug']) ?>"><?= sanitize($ra['title']) ?></a></h4>
+                            <h4 class="zs-art-title"><a href="/<?= sanitize($ra['slug']) ?>"><?= sanitize($ra['title']) ?></a></h4>
                             <p class="zs-art-desc"><?= sanitize($ra['excerpt']) ?></p>
                         </div>
                     </article>
@@ -1107,7 +1107,7 @@ if ($db && !empty($q)) {
         <div class="zs-articles-grid" style="margin-bottom:40px">
             <?php foreach ($articles as $art): ?>
                 <article class="zs-art-card">
-                    <a href="/article/<?= sanitize($art['slug']) ?>" class="zs-art-link">
+                    <a href="/<?= sanitize($art['slug']) ?>" class="zs-art-link">
                         <img src="<?= sanitize($art['featured_image']) ?>" alt="<?= sanitize($art['title']) ?>" class="zs-art-thumb">
                         <div class="zs-art-content">
                             <h3 class="zs-art-title"><?= sanitize($art['title']) ?></h3>
@@ -1198,11 +1198,11 @@ require_once __DIR__ . '/header.php';
                     <img src="<?= sanitize($a['featured_image']) ?>" alt="<?= sanitize($a['title']) ?>" class="zs-card-thumb">
                     <div class="zs-card-body">
                         <span class="zs-cat-badge" style="background:<?= sanitize($a['cat_color'] ?? '#0284c7') ?>"><?= sanitize($a['cat_name'] ?? 'News') ?></span>
-                        <h3 class="zs-card-title"><a href="/article/<?= sanitize($a['slug']) ?>"><?= sanitize($a['title']) ?></a></h3>
+                        <h3 class="zs-card-title"><a href="/<?= sanitize($a['slug']) ?>"><?= sanitize($a['title']) ?></a></h3>
                         <p class="zs-card-excerpt"><?= sanitize($a['excerpt']) ?></p>
                         <div class="zs-card-footer">
                             <span><?= date('M j, Y', strtotime($a['published_at'])) ?></span>
-                            <a href="/article/<?= sanitize($a['slug']) ?>" class="zs-read-more">Read &rarr;</a>
+                            <a href="/<?= sanitize($a['slug']) ?>" class="zs-read-more">Read &rarr;</a>
                         </div>
                     </div>
                 </article>

@@ -7,7 +7,7 @@ interface SitemapRobotsViewProps {
 }
 
 export const SitemapRobotsView: React.FC<SitemapRobotsViewProps> = ({ type }) => {
-  const { articles, listings, pages, navigateTo } = useCms();
+  const { articles, listings, pages, articleCategories, navigateTo } = useCms();
   const [copied, setCopied] = useState(false);
 
   const baseUrl = 'https://zunheboto.social';
@@ -67,10 +67,22 @@ ${articles
   .filter((a) => a.status === 'published')
   .map(
     (a) => `  <url>
-    <loc>${baseUrl}/article/${a.slug}</loc>
+    <loc>${baseUrl}/${a.slug}</loc>
     <lastmod>${a.published_at.split('T')[0]}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>`
+  )
+  .join('\n')}
+
+  <!-- Article Categories -->
+${articleCategories
+  .map(
+    (c) => `  <url>
+    <loc>${baseUrl}/category/${c.slug}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>`
   )
   .join('\n')}

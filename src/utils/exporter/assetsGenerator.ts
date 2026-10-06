@@ -300,7 +300,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         while ($a = $articles->fetch()):
         ?>
         <url>
-            <loc><?= $siteUrl ?>/article/<?= $a['slug'] ?></loc>
+            <loc><?= $siteUrl ?>/<?= $a['slug'] ?></loc>
             <lastmod><?= date('c', strtotime($a['updated_at'])) ?></lastmod>
             <priority>0.8</priority>
         </url>

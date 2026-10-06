@@ -164,7 +164,7 @@ export const CultureHeritageConfigForm: React.FC<Props> = ({
               />
               <input
                 type="text"
-                value={section.cta_url || '/articles/category/culture-heritage'}
+                value={section.cta_url || '/category/culture-heritage'}
                 onChange={(e) => onUpdate({ cta_url: e.target.value })}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-xs font-mono focus:outline-none focus:border-amber-600"
               />

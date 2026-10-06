@@ -491,6 +491,27 @@ export const CmsProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
         }
       }
+
+      // Sync server installation status
+      try {
+        const installRes = await fetch('/api/installer/status');
+        if (installRes.ok) {
+          const installData = await installRes.json();
+          if (installData && typeof installData.installed === 'boolean') {
+            setInstallConfig((prev) => {
+              const updated = {
+                ...prev,
+                is_installed: installData.installed,
+                installed_at: installData.installedAt || prev.installed_at
+              };
+              setStorage('install_config', updated);
+              return updated;
+            });
+          }
+        }
+      } catch (e) {
+        // Fallback to local storage if endpoint unavailable
+      }
     } catch (err) {
       console.warn('Could not fetch server CMS data:', err);
     }

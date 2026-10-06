@@ -110,7 +110,7 @@ export const CommunityCarousel: React.FC<CommunityCarouselProps> = ({
             return (
               <a
                 key={art.id}
-                href={`/article/${art.slug}`}
+                href={`/${art.slug}`}
                 className={`rounded-2xl overflow-hidden transition-all duration-300 group flex flex-col justify-between cursor-pointer border block ${
                   isDarkBg
                     ? 'bg-slate-900/90 border-slate-800 hover:border-amber-500/50'

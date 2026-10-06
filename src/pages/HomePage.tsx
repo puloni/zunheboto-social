@@ -192,7 +192,7 @@ export const HomePage: React.FC = () => {
 
                         {/* Stately Serif Headline */}
                         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black text-[#0B192C] leading-[1.2] hover:text-amber-800 transition-colors cursor-pointer mb-4">
-                          <a href={`/article/${featuredArticle.slug}`}>
+                          <a href={`/${featuredArticle.slug}`}>
                             {featuredArticle.title}
                           </a>
                         </h1>
@@ -230,7 +230,7 @@ export const HomePage: React.FC = () => {
 
                       <div className="pt-6 border-t border-slate-100 flex items-center justify-between mt-6">
                         <a
-                          href={`/article/${featuredArticle.slug}`}
+                          href={`/${featuredArticle.slug}`}
                           className="px-6 py-3 bg-[#0B192C] hover:bg-[#1E2A38] text-white font-bold rounded-xl text-xs uppercase tracking-wider flex items-center gap-2 group/btn transition-all shadow-xs cursor-pointer inline-flex"
                         >
                           <span>{sec.cta_label || 'Read Chronicle'}</span>
@@ -278,7 +278,7 @@ export const HomePage: React.FC = () => {
                     {subtitle && <p className="text-xs sm:text-sm text-slate-500 mt-1">{subtitle}</p>}
                   </div>
                   <a
-                    href={sec.cta_url || '/articles/category/local-news'}
+                    href={sec.cta_url || '/category/local-news'}
                     className="text-xs font-bold uppercase tracking-wider text-amber-700 hover:text-amber-800 flex items-center gap-1 cursor-pointer"
                   >
                     <span>{sec.cta_label || 'View All News'}</span>
@@ -290,7 +290,7 @@ export const HomePage: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
                   {/* Leading News Card (Col-span 7) */}
                   <a
-                    href={`/article/${leadNews.slug}`}
+                    href={`/${leadNews.slug}`}
                     className="lg:col-span-7 bg-white border border-slate-200/90 rounded-2xl overflow-hidden hover:shadow-md transition-all group flex flex-col justify-between cursor-pointer block"
                   >
                     <div>
@@ -356,7 +356,7 @@ export const HomePage: React.FC = () => {
                     {secondaryNews.map((art) => (
                       <a
                         key={art.id}
-                        href={`/article/${art.slug}`}
+                        href={`/${art.slug}`}
                         className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col sm:flex-row gap-5 flex-1 block"
                       >
                         <div className="w-full sm:w-36 aspect-[16/10] sm:aspect-square rounded-xl overflow-hidden bg-slate-100 shrink-0">
@@ -435,7 +435,7 @@ export const HomePage: React.FC = () => {
                     {subtitle && <p className="text-xs sm:text-sm text-slate-500 mt-1">{subtitle}</p>}
                   </div>
                   <a
-                    href={sec.cta_url || '/articles/category/culture-heritage'}
+                    href={sec.cta_url || '/category/culture-heritage'}
                     className="text-xs font-bold uppercase tracking-wider text-amber-700 hover:text-amber-800 flex items-center gap-1 cursor-pointer"
                   >
                     <span>{sec.cta_label || 'View All Cultural Stories'}</span>
@@ -446,7 +446,7 @@ export const HomePage: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                   {/* Primary Culture Post (Col-span 6) */}
                   <a
-                    href={`/article/${mainCulture.slug}`}
+                    href={`/${mainCulture.slug}`}
                     className="lg:col-span-6 bg-white border border-slate-200/90 rounded-2xl overflow-hidden hover:shadow-md transition-all group flex flex-col justify-between cursor-pointer block"
                   >
                     <div>
@@ -500,7 +500,7 @@ export const HomePage: React.FC = () => {
                     {subCulture.map((art) => (
                       <a
                         key={art.id}
-                        href={`/article/${art.slug}`}
+                        href={`/${art.slug}`}
                         className="bg-white border border-slate-200 rounded-2xl p-4 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between block"
                       >
                         <div>
@@ -649,7 +649,7 @@ export const HomePage: React.FC = () => {
                     {subtitle && <p className="text-xs sm:text-sm text-slate-500 mt-1">{subtitle}</p>}
                   </div>
                   <a
-                    href={sec.cta_url || '/articles/category/community-society'}
+                    href={sec.cta_url || '/category/community-society'}
                     className="text-xs font-bold uppercase tracking-wider text-amber-700 hover:text-amber-800 flex items-center gap-1 cursor-pointer"
                   >
                     <span>{sec.cta_label || 'View All Community Stories'}</span>
@@ -883,7 +883,7 @@ export const HomePage: React.FC = () => {
                   {moreArticles.map((art) => (
                     <a
                       key={art.id}
-                      href={`/article/${art.slug}`}
+                      href={`/${art.slug}`}
                       className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden hover:shadow-md transition-all group flex flex-col justify-between cursor-pointer block"
                     >
                       <div>

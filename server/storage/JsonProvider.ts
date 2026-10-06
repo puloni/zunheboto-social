@@ -80,9 +80,9 @@ export class JsonStorageProvider implements IStorageProvider {
         if (parsed && typeof parsed === 'object') {
           const isInstalled = Boolean(parsed._installed || parsed.settings || parsed.adminUser);
           this.cachedStore = {
-            settings: { ...INITIAL_SETTINGS, ...(parsed.settings || {}) },
-            adminUser: { ...INITIAL_ADMIN_USER, ...(parsed.adminUser || {}) },
-            users: Array.isArray(parsed.users) && parsed.users.length > 0 ? parsed.users : INITIAL_ADMIN_USERS,
+            settings: parsed.settings ? { ...INITIAL_SETTINGS, ...parsed.settings } : INITIAL_SETTINGS,
+            adminUser: parsed.adminUser || null,
+            users: Array.isArray(parsed.users) ? parsed.users : (parsed.adminUser ? [parsed.adminUser] : (isInstalled ? [] : INITIAL_ADMIN_USERS)),
             articleCategories: Array.isArray(parsed.articleCategories) ? parsed.articleCategories : (isInstalled ? [] : INITIAL_ARTICLE_CATEGORIES),
             articles: Array.isArray(parsed.articles) ? parsed.articles : (isInstalled ? [] : INITIAL_ARTICLES),
             listingCategories: Array.isArray(parsed.listingCategories) ? parsed.listingCategories : (isInstalled ? [] : INITIAL_LISTING_CATEGORIES),
@@ -94,8 +94,8 @@ export class JsonStorageProvider implements IStorageProvider {
             homepageSections: Array.isArray(parsed.homepageSections) ? parsed.homepageSections : (isInstalled ? [] : INITIAL_HOMEPAGE_SECTIONS),
             emergencyHotlines: Array.isArray(parsed.emergencyHotlines) ? parsed.emergencyHotlines : (isInstalled ? [] : INITIAL_EMERGENCY_HOTLINES),
             newsTips: Array.isArray(parsed.newsTips) ? parsed.newsTips : (isInstalled ? [] : INITIAL_NEWS_TIPS),
-            classifieds: Array.isArray(parsed.classifieds) && parsed.classifieds.length > 0 ? parsed.classifieds : INITIAL_CLASSIFIEDS,
-            sponsoredAds: Array.isArray(parsed.sponsoredAds) && parsed.sponsoredAds.length > 0 ? parsed.sponsoredAds : INITIAL_SPONSORED_ADS,
+            classifieds: Array.isArray(parsed.classifieds) ? parsed.classifieds : (isInstalled ? [] : INITIAL_CLASSIFIEDS),
+            sponsoredAds: Array.isArray(parsed.sponsoredAds) ? parsed.sponsoredAds : (isInstalled ? [] : INITIAL_SPONSORED_ADS),
             _installed: true
           };
           return this.cachedStore;

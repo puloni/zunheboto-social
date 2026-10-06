@@ -160,7 +160,7 @@ export const SearchPage: React.FC = () => {
                 {matchedArticles.map((art) => (
                   <a
                     key={art.id}
-                    href={`/article/${art.slug}`}
+                    href={`/${art.slug}`}
                     className="p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-300 hover:shadow-xs transition-all cursor-pointer flex gap-4 items-center block"
                   >
                     <div className="w-20 h-16 rounded-lg overflow-hidden bg-slate-100 shrink-0">

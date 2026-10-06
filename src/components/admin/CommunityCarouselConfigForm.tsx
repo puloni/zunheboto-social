@@ -195,7 +195,7 @@ export const CommunityCarouselConfigForm: React.FC<Props> = ({
               />
               <input
                 type="text"
-                value={section.cta_url || '/articles/category/community-society'}
+                value={section.cta_url || '/category/community-society'}
                 onChange={(e) => onUpdate({ cta_url: e.target.value })}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-xs font-mono focus:outline-none focus:border-emerald-600"
               />

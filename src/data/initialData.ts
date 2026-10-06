@@ -177,7 +177,7 @@ export const INITIAL_ARTICLES: Article[] = [
     is_featured_story: true,
     seo_title: 'Ahuna Festival 2026 Celebrated with Splendor in Zunheboto',
     meta_description: 'Detailed coverage of the Ahuna post-harvest festival in Zunheboto, showcasing traditional Sumi dances, indigenous sports, and community feasts.',
-    canonical_url: 'https://zunheboto.social/article/ahuna-festival-2026-zunheboto-post-harvest-celebration',
+    canonical_url: 'https://zunheboto.social/ahuna-festival-2026-zunheboto-post-harvest-celebration',
     tags: ['Ahuna', 'Sumi Heritage', 'Zunheboto Culture', 'Festivals', 'Nagaland']
   },
   {
@@ -210,7 +210,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_minutes: 3,
     seo_title: 'Solar Cold Storage for Farmers in Satoi Range, Zunheboto',
     meta_description: 'New 15MT solar-powered cold storage in Satoi range launched to empower organic growers in Zunheboto district.',
-    canonical_url: 'https://zunheboto.social/article/solar-cold-storage-inaugurated-satoi-range-farmers',
+    canonical_url: 'https://zunheboto.social/solar-cold-storage-inaugurated-satoi-range-farmers',
     tags: ['Agriculture', 'Solar Energy', 'Satoi', 'Organic Farming', 'Rural Economy']
   },
   {
@@ -242,7 +242,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_minutes: 3,
     seo_title: 'Zunheboto Town Waste Segregation Initiative Launched',
     meta_description: 'Zunheboto Town Council initiates color-coded waste segregation and composting across municipal colonies.',
-    canonical_url: 'https://zunheboto.social/article/zunheboto-town-council-waste-segregation-campaign',
+    canonical_url: 'https://zunheboto.social/zunheboto-town-council-waste-segregation-campaign',
     tags: ['Zunheboto Town Council', 'Environment', 'Civic Action', 'Waste Management']
   },
   {
@@ -274,7 +274,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_minutes: 4,
     seo_title: 'Ghosu Bird Sanctuary Eco-Trek Guidelines Zunheboto',
     meta_description: 'Explore the serene birding trails of Ghosu Sanctuary in Zunheboto with updated eco-friendly trekking guidelines.',
-    canonical_url: 'https://zunheboto.social/article/ghosu-bird-sanctuary-eco-trek-guidelines',
+    canonical_url: 'https://zunheboto.social/ghosu-bird-sanctuary-eco-trek-guidelines',
     tags: ['Ghosu Sanctuary', 'Birdwatching', 'Eco Tourism', 'Conservation', 'Wildlife']
   },
   {
@@ -306,7 +306,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_minutes: 5,
     seo_title: 'Sumi Baptist Church Zunheboto: Architectural Marvel of Nagaland',
     meta_description: 'An in-depth look into the architectural significance and spiritual heritage of the Sumi Baptist Church in Zunheboto.',
-    canonical_url: 'https://zunheboto.social/article/sumi-baptist-church-zunheboto-architectural-beacon',
+    canonical_url: 'https://zunheboto.social/sumi-baptist-church-zunheboto-architectural-beacon',
     tags: ['SBCZ', 'Architecture', 'Zunheboto Landmark', 'Sumi Heritage', 'Churches']
   },
   {
@@ -336,7 +336,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_minutes: 2,
     seo_title: 'Zunheboto District Inter-School Athletics Championship 2026',
     meta_description: 'Over 400 youth athletes compete in the 38th Zunheboto district school sports meet.',
-    canonical_url: 'https://zunheboto.social/article/district-inter-school-athletics-championship-2026',
+    canonical_url: 'https://zunheboto.social/district-inter-school-athletics-championship-2026',
     tags: ['Youth Sports', 'Athletics', 'Zunheboto Schools', 'Archery']
   },
   {
@@ -366,7 +366,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 3,
     seo_title: 'Zunheboto District Hospital Receives Radiography Unit',
     meta_description: 'Modern digital radiography unit installed at Zunheboto Civil Hospital.',
-    canonical_url: 'https://zunheboto.social/article/zunheboto-district-hospital-receives-radiography-unit',
+    canonical_url: 'https://zunheboto.social/zunheboto-district-hospital-receives-radiography-unit',
     tags: ['Healthcare', 'Hospital', 'Civic', 'Zunheboto News']
   },
   {
@@ -396,7 +396,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 3,
     seo_title: 'Road Surface Restoration on Zunheboto-Mokokchung Highway',
     meta_description: 'PWD commences highway resurfacing and slope reinforcement between Zunheboto and Mokokchung.',
-    canonical_url: 'https://zunheboto.social/article/road-restoration-works-begin-zunheboto-mokokchung-highway',
+    canonical_url: 'https://zunheboto.social/road-restoration-works-begin-zunheboto-mokokchung-highway',
     tags: ['Infrastructure', 'Roads', 'PWD', 'Highways']
   },
   {
@@ -426,7 +426,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 4,
     seo_title: 'Digitizing Sumi Oral Traditions and Ballads in Zunheboto',
     meta_description: 'Cultural researchers preserve and digitize 100 ancient Sumi folk songs in Zunheboto.',
-    canonical_url: 'https://zunheboto.social/article/preserving-sumi-oral-traditions-folk-ballads-digitized',
+    canonical_url: 'https://zunheboto.social/preserving-sumi-oral-traditions-folk-ballads-digitized',
     tags: ['Sumi Heritage', 'Folk Music', 'Culture', 'History']
   },
   {
@@ -456,7 +456,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 4,
     seo_title: 'Sumi Master Weavers Exhibit Sacred Shawl Motifs',
     meta_description: 'Traditional Sumi loin-loom weavers exhibit historical textiles and indigenous patterns.',
-    canonical_url: 'https://zunheboto.social/article/sacred-craft-avi-kighilli-sumi-master-weavers-exhibit',
+    canonical_url: 'https://zunheboto.social/sacred-craft-avi-kighilli-sumi-master-weavers-exhibit',
     tags: ['Weaving', 'Sumi Shawls', 'Crafts', 'Naga Textiles']
   },
   {
@@ -486,7 +486,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 3,
     seo_title: 'Indigenous Sumi Bamboo Architecture and Granary Engineering',
     meta_description: 'Study on traditional Sumi bamboo woodwork and earthquake-resistant granary craftsmanship.',
-    canonical_url: 'https://zunheboto.social/article/traditional-bamboo-woodwork-sumi-granaries-seismic-design',
+    canonical_url: 'https://zunheboto.social/traditional-bamboo-woodwork-sumi-granaries-seismic-design',
     tags: ['Architecture', 'Bamboo Craft', 'Culture', 'Heritage']
   },
   {
@@ -516,7 +516,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 4,
     seo_title: 'Tuluni Festival Preparations in Zunheboto District',
     meta_description: 'Villages across Zunheboto begin preparations for the premier Sumi Tuluni celebration.',
-    canonical_url: 'https://zunheboto.social/article/tuluni-festival-preparations-begin-zunheboto-villages',
+    canonical_url: 'https://zunheboto.social/tuluni-festival-preparations-begin-zunheboto-villages',
     tags: ['Tuluni', 'Festivals', 'Sumi Heritage', 'Community']
   },
   {
@@ -546,7 +546,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 3,
     seo_title: 'Zunheboto Youth Choir Triumphs at Music Conclave',
     meta_description: 'Zunheboto Youth Choir earns top accolades at Northeast Sacred Choral Championship.',
-    canonical_url: 'https://zunheboto.social/article/zunheboto-youth-choir-wins-gold-sacred-music-conclave',
+    canonical_url: 'https://zunheboto.social/zunheboto-youth-choir-wins-gold-sacred-music-conclave',
     tags: ['Choir', 'Youth', 'Music', 'Community Achievements']
   },
   {
@@ -576,7 +576,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 3,
     seo_title: 'Zunheboto District Library Opens Digital Learning Hub',
     meta_description: 'Renovated district public library provides digital workstations and competitive exam resources.',
-    canonical_url: 'https://zunheboto.social/article/district-library-renovation-opens-digital-learning-hub',
+    canonical_url: 'https://zunheboto.social/district-library-renovation-opens-digital-learning-hub',
     tags: ['Education', 'Library', 'Students', 'Youth Empowerment']
   },
   {
@@ -606,7 +606,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 3,
     seo_title: 'Record Highland Honey Harvest for Suruhuto Beekeepers',
     meta_description: 'Suruhuto beekeepers achieve record organic forest honey harvest in Zunheboto.',
-    canonical_url: 'https://zunheboto.social/article/highland-wild-honey-harvesting-record-suruhuto-beekeepers',
+    canonical_url: 'https://zunheboto.social/highland-wild-honey-harvesting-record-suruhuto-beekeepers',
     tags: ['Agriculture', 'Beekeeping', 'Honey', 'Rural Economy']
   },
   {
@@ -636,7 +636,7 @@ export const INITIAL_ARTICLES: Article[] = [
     read_time_mins: 3,
     seo_title: 'Satoi Range Biodiversity Survey Confirms Wildlife Habitats',
     meta_description: 'Wildlife survey confirms thriving populations of rare fauna in Satoi Range, Zunheboto.',
-    canonical_url: 'https://zunheboto.social/article/satoi-range-biodiversity-survey-confirms-wildlife-habitats',
+    canonical_url: 'https://zunheboto.social/satoi-range-biodiversity-survey-confirms-wildlife-habitats',
     tags: ['Wildlife', 'Satoi', 'Conservation', 'Nature', 'Nagaland']
   }
 ];
@@ -1333,9 +1333,9 @@ export const INITIAL_HOMEPAGE_SECTIONS: HomepageSectionConfig[] = [
     custom_title: 'Latest News',
     subtitle: 'Breaking headlines and municipal reports from around the hills',
     button_text: 'View All News',
-    button_url: '/articles/category/local-news',
+    button_url: '/category/local-news',
     cta_label: 'View All News',
-    cta_url: '/articles/category/local-news',
+    cta_url: '/category/local-news',
     show_button: true,
     enabled: true,
     order: 2,
@@ -1362,9 +1362,9 @@ export const INITIAL_HOMEPAGE_SECTIONS: HomepageSectionConfig[] = [
     custom_title: 'Culture, Heritage & Environment',
     subtitle: 'Celebrating ancient Sumi traditions, folklore, indigenous ecology, and artisan craftsmanship',
     button_text: 'Explore Culture Stories',
-    button_url: '/articles/category/culture-heritage',
+    button_url: '/category/culture-heritage',
     cta_label: 'Explore Culture Stories',
-    cta_url: '/articles/category/culture-heritage',
+    cta_url: '/category/culture-heritage',
     show_button: true,
     enabled: true,
     order: 3,
@@ -1417,9 +1417,9 @@ export const INITIAL_HOMEPAGE_SECTIONS: HomepageSectionConfig[] = [
     custom_title: 'Community & Society',
     subtitle: 'Stories of youth excellence, church life, and collective civic action',
     button_text: 'View Community Feed',
-    button_url: '/articles/category/community-society',
+    button_url: '/category/community-society',
     cta_label: 'View Community Feed',
-    cta_url: '/articles/category/community-society',
+    cta_url: '/category/community-society',
     show_button: true,
     enabled: true,
     order: 5,

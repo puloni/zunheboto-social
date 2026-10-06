@@ -262,7 +262,7 @@ export const AdminArticles: React.FC = () => {
                     URL Slug (Permallink)
                   </label>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-400 font-mono">/article/</span>
+                    <span className="text-xs text-slate-400 font-mono">/</span>
                     <input
                       type="text"
                       value={slug}
@@ -784,7 +784,7 @@ export const AdminArticles: React.FC = () => {
                               <span>{art.title}</span>
                             </div>
                             <div className="text-[11px] text-slate-400 font-mono truncate">
-                              /article/{art.slug}
+                              /{art.slug}
                             </div>
                           </div>
                         </div>
@@ -891,7 +891,7 @@ export const AdminArticles: React.FC = () => {
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
                       <a
-                        href={`/article/${art.slug}`}
+                        href={`/${art.slug}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-block p-1.5 text-slate-600 hover:text-amber-700 hover:bg-slate-100 rounded transition-colors"

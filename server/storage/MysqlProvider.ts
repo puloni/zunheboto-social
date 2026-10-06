@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise';
+import { MigrationManager } from './migrations';
 import {
   DatabaseConfig,
   IStorageProvider,
@@ -415,22 +416,18 @@ export class MysqlStorageProvider implements IStorageProvider {
       }
     ];
 
-    const created: string[] = [];
     try {
       for (const t of tableQueries) {
         await conn.query(t.query);
-        created.push(t.name);
       }
 
-      // Ensure avatar_url column supports long data URLs
-      try {
-        await conn.query("ALTER TABLE `zs_admin_users` MODIFY COLUMN `avatar_url` LONGTEXT DEFAULT NULL");
-      } catch (e) {}
+      // Run versioned migrations (tracking in zs_migrations)
+      const migrationResult = await MigrationManager.runPendingMigrations(conn);
 
       return {
         success: true,
-        message: `Successfully verified and initialized ${created.length} database tables.`,
-        tablesCreated: created
+        message: `Successfully verified schema and applied ${migrationResult.applied.length} pending migrations.`,
+        tablesCreated: migrationResult.applied
       };
     } finally {
       conn.release();
@@ -531,57 +528,52 @@ export class MysqlStorageProvider implements IStorageProvider {
       const isInstalled = await this.isDatabaseInitialized(conn);
 
       if (!isInstalled) {
-        console.log('MysqlStorageProvider: First-time database installation detected. Seeding initial records...');
+        console.log('MysqlStorageProvider: Database not yet initialized with CMS tables/records.');
         conn.release();
-        const defaultStore = this.getDefaultStore();
-        await this.saveStore(defaultStore);
-        const conn2 = await pool.getConnection();
-        try {
-          await conn2.query("INSERT INTO `zs_system_meta` (`meta_key`, `meta_value`) VALUES ('installed', '1') ON DUPLICATE KEY UPDATE `meta_value` = '1'");
-        } catch (e) {} finally {
-          conn2.release();
-        }
-        return defaultStore;
+        return this.getDefaultStore();
       }
 
       // 1. Settings
-      let settings = INITIAL_SETTINGS;
+      let settings: any = null;
       try {
-        const [settingsRows]: any = await conn.query('SELECT * FROM `zs_settings` LIMIT 1');
+        const [settingsRows]: any = await conn.query('SELECT * FROM `zs_settings` WHERE `id` = ? LIMIT 1', ['default']);
         if (settingsRows.length > 0) {
           const row = settingsRows[0];
           if (row.data_json) {
             try {
-              settings = { ...INITIAL_SETTINGS, ...JSON.parse(row.data_json) };
+              settings = JSON.parse(row.data_json);
             } catch (err) {
-              settings = { ...INITIAL_SETTINGS, ...row };
-              delete (settings as any).data_json;
+              settings = { ...row };
+              delete settings.data_json;
             }
           } else {
-            settings = { ...INITIAL_SETTINGS, ...row };
-            delete (settings as any).data_json;
+            settings = { ...row };
+            delete settings.data_json;
           }
         }
       } catch (e) {
         console.warn('MysqlStorageProvider: could not load settings table', e);
       }
+      if (!settings) {
+        settings = INITIAL_SETTINGS;
+      }
 
       // 2. Admin User
-      let adminUser = INITIAL_ADMIN_USER;
+      let adminUser: any = null;
       try {
-        const [adminRows]: any = await conn.query('SELECT * FROM `zs_admin_users` LIMIT 1');
+        const [adminRows]: any = await conn.query('SELECT * FROM `zs_admin_users` ORDER BY `id` ASC LIMIT 1');
         if (adminRows.length > 0) {
           const row = adminRows[0];
           if (row.data_json) {
             try {
-              adminUser = { ...INITIAL_ADMIN_USER, ...JSON.parse(row.data_json) };
+              adminUser = JSON.parse(row.data_json);
             } catch (err) {
-              adminUser = { ...INITIAL_ADMIN_USER, ...row };
-              delete (adminUser as any).data_json;
+              adminUser = { ...row };
+              delete adminUser.data_json;
             }
           } else {
-            adminUser = { ...INITIAL_ADMIN_USER, ...row };
-            delete (adminUser as any).data_json;
+            adminUser = { ...row };
+            delete adminUser.data_json;
           }
         }
       } catch (e) {
@@ -690,11 +682,13 @@ export class MysqlStorageProvider implements IStorageProvider {
       // 14. Editorial Users
       let users: any[] = [];
       try {
-        const [userRows]: any = await conn.query('SELECT * FROM `zs_admin_users`');
+        const [userRows]: any = await conn.query('SELECT * FROM `zs_admin_users` ORDER BY `id` ASC');
         users = this.parseRows(userRows);
-        if (!users || users.length === 0) users = INITIAL_ADMIN_USERS;
+        if (!adminUser && users.length > 0) {
+          adminUser = users.find((u: any) => u.role === 'superadmin' || u.role === 'admin') || users[0];
+        }
       } catch (e) {
-        users = INITIAL_ADMIN_USERS;
+        users = [];
       }
 
       // 15. Local Classifieds
@@ -702,9 +696,8 @@ export class MysqlStorageProvider implements IStorageProvider {
       try {
         const [classRows]: any = await conn.query('SELECT * FROM `zs_classifieds` ORDER BY `created_at` DESC');
         classifieds = this.parseRows(classRows);
-        if (!classifieds || classifieds.length === 0) classifieds = INITIAL_CLASSIFIEDS;
       } catch (e) {
-        classifieds = INITIAL_CLASSIFIEDS;
+        classifieds = [];
       }
 
       // 16. Sponsored Campaigns
@@ -712,9 +705,8 @@ export class MysqlStorageProvider implements IStorageProvider {
       try {
         const [adRows]: any = await conn.query('SELECT * FROM `zs_sponsored_campaigns`');
         sponsoredAds = this.parseRows(adRows);
-        if (!sponsoredAds || sponsoredAds.length === 0) sponsoredAds = INITIAL_SPONSORED_ADS;
       } catch (e) {
-        sponsoredAds = INITIAL_SPONSORED_ADS;
+        sponsoredAds = [];
       }
 
       return {
@@ -1180,7 +1172,10 @@ export class MysqlStorageProvider implements IStorageProvider {
       'menuItems',
       'homepageSections',
       'emergencyHotlines',
-      'newsTips'
+      'newsTips',
+      'users',
+      'classifieds',
+      'sponsoredAds'
     ];
 
     for (const key of keys) {

@@ -117,7 +117,7 @@ export const AdminFooter: React.FC = () => {
     if (newMenuUrlType === 'page') {
       targetUrl = newMenuSelectedPage;
     } else if (newMenuUrlType === 'category') {
-      targetUrl = `/articles/category/${newMenuSelectedCat}`;
+      targetUrl = `/category/${newMenuSelectedCat}`;
     } else if (newMenuUrlType === 'directory') {
       targetUrl = '/directory';
     } else {

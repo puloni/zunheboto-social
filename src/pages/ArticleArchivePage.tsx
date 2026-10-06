@@ -40,12 +40,12 @@ export const ArticleArchivePage: React.FC<ArticleArchivePageProps> = ({ initialC
     const siteUrl = (settings.site_url || 'https://zunheboto.social').replace(/\/+$/, '');
 
     if (activeCategoryObj) {
-      const canonicalUrl = `${siteUrl}/articles/category/${activeCategoryObj.slug}`;
+      const canonicalUrl = `${siteUrl}/category/${activeCategoryObj.slug}`;
       const breadcrumbLd = buildBreadcrumbSchema(
         [
           { name: 'Home', url: '/' },
           { name: 'News Archive', url: '/articles' },
-          { name: activeCategoryObj.name, url: `/articles/category/${activeCategoryObj.slug}` }
+          { name: activeCategoryObj.name, url: `/category/${activeCategoryObj.slug}` }
         ],
         settings
       );
@@ -173,11 +173,11 @@ export const ArticleArchivePage: React.FC<ArticleArchivePageProps> = ({ initialC
             return (
               <a
                 key={cat.id}
-                href={`/articles/category/${cat.slug}`}
+                href={`/category/${cat.slug}`}
                 onClick={(e) => {
                   e.preventDefault();
                   setSelectedCategory(cat.slug);
-                  navigateTo(`/articles/category/${cat.slug}`);
+                  navigateTo(`/category/${cat.slug}`);
                 }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-1.5 ${
                   isSelected
@@ -219,7 +219,7 @@ export const ArticleArchivePage: React.FC<ArticleArchivePageProps> = ({ initialC
           {filtered.map((art) => (
             <a
               key={art.id}
-              href={`/article/${art.slug}`}
+              href={`/${art.slug}`}
               className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden hover:shadow-md transition-all group flex flex-col justify-between cursor-pointer block"
             >
               <div>
